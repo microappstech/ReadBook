@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReadBook.Data;
 
@@ -11,9 +12,11 @@ using ReadBook.Data;
 namespace ReadBook.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20230410204326_change in relations ef")]
+    partial class changeinrelationsef
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,10 +35,6 @@ namespace ReadBook.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Cover")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -83,7 +82,7 @@ namespace ReadBook.Migrations
 
                     b.HasKey("IdCategory");
 
-                    b.ToTable("Categories");
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("ReadBook.Models.Writer", b =>
@@ -100,9 +99,6 @@ namespace ReadBook.Migrations
 
                     b.Property<string>("Nationality")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Picture")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

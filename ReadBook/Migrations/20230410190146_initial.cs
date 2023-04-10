@@ -54,14 +54,14 @@ namespace ReadBook.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nationality = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WritersId = table.Column<int>(type: "int", nullable: true)
+                    BooksId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Writers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Writers_Books_WritersId",
-                        column: x => x.WritersId,
+                        name: "FK_Writers_Books_BooksId",
+                        column: x => x.BooksId,
                         principalTable: "Books",
                         principalColumn: "Id");
                 });
@@ -96,9 +96,9 @@ namespace ReadBook.Migrations
                 column: "CategoryIdCategory");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Writers_WritersId",
+                name: "IX_Writers_BooksId",
                 table: "Writers",
-                column: "WritersId");
+                column: "BooksId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Writers_Books_WriterId",

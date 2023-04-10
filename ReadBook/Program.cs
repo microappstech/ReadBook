@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ReadBook.Data;
+using ReadBook.Data.IServices;
+using ReadBook.Data.Seeder;
+using ReadBook.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,7 @@ builder.Services.AddDbContext<DBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
 });
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -29,6 +33,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
+    pattern: "{controller=Book}/{action=Index}/{id?}");
+DbInitializer.Seed(app);
 app.Run();

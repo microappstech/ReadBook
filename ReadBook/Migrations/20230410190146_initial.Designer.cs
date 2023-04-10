@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReadBook.Data;
 
@@ -11,9 +12,11 @@ using ReadBook.Data;
 namespace ReadBook.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20230410190146_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,12 +33,8 @@ namespace ReadBook.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CategoryIdCategory")
                         .HasColumnType("int");
-
-                    b.Property<string>("Cover")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -49,7 +48,7 @@ namespace ReadBook.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryIdCategory");
 
                     b.ToTable("Books");
                 });
@@ -83,7 +82,7 @@ namespace ReadBook.Migrations
 
                     b.HasKey("IdCategory");
 
-                    b.ToTable("Categories");
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("ReadBook.Models.Writer", b =>
@@ -94,6 +93,9 @@ namespace ReadBook.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BooksId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -102,10 +104,9 @@ namespace ReadBook.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Picture")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("BooksId");
 
                     b.ToTable("Writers");
                 });
@@ -114,7 +115,7 @@ namespace ReadBook.Migrations
                 {
                     b.HasOne("ReadBook.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("CategoryIdCategory")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -138,6 +139,15 @@ namespace ReadBook.Migrations
                     b.Navigation("book");
 
                     b.Navigation("writer");
+                });
+
+            modelBuilder.Entity("ReadBook.Models.Writer", b =>
+                {
+                    b.HasOne("ReadBook.Models.Book", "Books")
+                        .WithMany()
+                        .HasForeignKey("BooksId");
+
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("ReadBook.Models.Book", b =>

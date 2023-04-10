@@ -13,8 +13,10 @@ namespace ReadBook.Models
         public  double Price { get; set; }
         [Display(Name = "Date of creation")]
         public DateTime DateCreation { get; set; }
+        public int CategoryId { get; set; }
         [Required]
+        public String Cover { get; set; } = "defaulCover.png";
         public Category? Category { get; set; }
-        public IList<BookWriter>? writers { get; set; }
+        public IList<BookWriter>? BooksWiters { get; set; }
     }
 }

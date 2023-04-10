@@ -12,7 +12,7 @@ namespace ReadBook.Data
             
         }
         public DbSet<Book> Books { get; set; }
-        public DbSet<Category> categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Writer> Writers { get; set; }
         public DbSet<BookWriter> Writers_Books  { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

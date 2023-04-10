@@ -10,7 +10,7 @@ namespace ReadBook.Models
         public string? Name { get; set; }
         [Required]
         public string? Nationality { get; set; }
-        public Book? Writers { get; set; }
-        public IList<BookWriter>? Books { get; set; }
+        public string? Picture { get; set; } = "defaultPicture.png";
+        public IList<BookWriter>? BooksWiters { get; set; }
     }
 }

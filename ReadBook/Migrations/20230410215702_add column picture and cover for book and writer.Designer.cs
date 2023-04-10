@@ -12,8 +12,8 @@ using ReadBook.Data;
 namespace ReadBook.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20230410183005_initial")]
-    partial class initial
+    [Migration("20230410215702_add column picture and cover for book and writer")]
+    partial class addcolumnpictureandcoverforbookandwriter
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,12 @@ namespace ReadBook.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryIdCategory")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Cover")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -48,7 +52,7 @@ namespace ReadBook.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryIdCategory");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Books");
                 });
@@ -82,7 +86,7 @@ namespace ReadBook.Migrations
 
                     b.HasKey("IdCategory");
 
-                    b.ToTable("categories");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ReadBook.Models.Writer", b =>
@@ -101,12 +105,10 @@ namespace ReadBook.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("WritersId")
-                        .HasColumnType("int");
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("WritersId");
 
                     b.ToTable("Writers");
                 });
@@ -115,7 +117,7 @@ namespace ReadBook.Migrations
                 {
                     b.HasOne("ReadBook.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryIdCategory")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -125,13 +127,13 @@ namespace ReadBook.Migrations
             modelBuilder.Entity("ReadBook.Models.BookWriter", b =>
                 {
                     b.HasOne("ReadBook.Models.Book", "book")
-                        .WithMany("writers")
+                        .WithMany("BooksWiters")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ReadBook.Models.Writer", "writer")
-                        .WithMany("Books")
+                        .WithMany("BooksWiters")
                         .HasForeignKey("WriterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -141,23 +143,14 @@ namespace ReadBook.Migrations
                     b.Navigation("writer");
                 });
 
-            modelBuilder.Entity("ReadBook.Models.Writer", b =>
-                {
-                    b.HasOne("ReadBook.Models.Book", "Writers")
-                        .WithMany()
-                        .HasForeignKey("WritersId");
-
-                    b.Navigation("Writers");
-                });
-
             modelBuilder.Entity("ReadBook.Models.Book", b =>
                 {
-                    b.Navigation("writers");
+                    b.Navigation("BooksWiters");
                 });
 
             modelBuilder.Entity("ReadBook.Models.Writer", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("BooksWiters");
                 });
 #pragma warning restore 612, 618
         }
