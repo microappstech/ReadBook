@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ReadBook.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "categories",
+                name: "Categories",
                 columns: table => new
                 {
                     IdCategory = table.Column<int>(type: "int", nullable: false)
@@ -21,7 +21,22 @@ namespace ReadBook.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_categories", x => x.IdCategory);
+                    table.PrimaryKey("PK_Categories", x => x.IdCategory);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Writers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nationality = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Writers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -33,37 +48,18 @@ namespace ReadBook.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     DateCreation = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategoryIdCategory = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Cover = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_categories_CategoryIdCategory",
-                        column: x => x.CategoryIdCategory,
-                        principalTable: "categories",
+                        name: "FK_Books_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "IdCategory",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Writers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nationality = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BooksId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Writers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Writers_Books_BooksId",
-                        column: x => x.BooksId,
-                        principalTable: "Books",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -91,14 +87,9 @@ namespace ReadBook.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_CategoryIdCategory",
+                name: "IX_Books_CategoryId",
                 table: "Books",
-                column: "CategoryIdCategory");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Writers_BooksId",
-                table: "Writers",
-                column: "BooksId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Writers_Books_WriterId",
@@ -113,13 +104,13 @@ namespace ReadBook.Migrations
                 name: "Writers_Books");
 
             migrationBuilder.DropTable(
-                name: "Writers");
-
-            migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "categories");
+                name: "Writers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

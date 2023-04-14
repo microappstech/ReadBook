@@ -12,8 +12,8 @@ using ReadBook.Data;
 namespace ReadBook.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20230410215702_add column picture and cover for book and writer")]
-    partial class addcolumnpictureandcoverforbookandwriter
+    [Migration("20230413233238_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
