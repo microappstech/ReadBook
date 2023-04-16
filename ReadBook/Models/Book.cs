@@ -16,6 +16,7 @@ namespace ReadBook.Models
         public int CategoryId { get; set; }
         [Required]
         public String Cover { get; set; } = "defaulCover.png";
+        public string? Resume { get; set; }
         public Category? Category { get; set; }
         public IList<BookWriter>? BooksWiters { get; set; }
     }

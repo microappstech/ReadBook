@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ReadBook.Data;
 using ReadBook.Data.IServices;
 using ReadBook.Data.Services;
@@ -33,20 +34,21 @@ namespace ReadBook.Controllers
         }
 
         // GET: BookController/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
+            var Categories = bookService.GetCategories();
+            ViewBag.Categories = new SelectList(Categories, "Id", "Name");
             return View();
         }
 
         // POST: BookController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Book book)
+        public async Task<IActionResult> Create(Book book, IFormFile cover)
         {
             try
             {
-
-                await bookService.AddBookAsync(book);
+                await bookService.AddBookAsync(book, cover);
                 return RedirectToAction(nameof(Index));
             }
             catch

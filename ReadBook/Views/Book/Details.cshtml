@@ -1,48 +1,28 @@
 ﻿@model ReadBook.Models.Book
 
-@{
-    ViewData["Title"] = "Details";
-}
-
-<h1>Details</h1>
-
-<div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCreation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCreation)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cover)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cover)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-    </dl>
+<div id="" class="mt-5">
+    <div class="modal-content">
+        <div class="row" id="product-two">
+            <div class="col m4 s12">
+                <img src="~/images/Book/@Model.Cover" class="responsive-img" alt="">
+            </div>
+            <div class="col m8 s12">
+                <p>@Model.Category</p>
+                <h5>@Model.Name</h5>
+                <span class="new badge left ml-0 mr-2" data-badge-caption="">4.2 Star</span>
+                <p>Availability: <span class="red-text">Out of stock</span></p>
+                <hr class="mb-5">
+                <span class="vertical-align-top ml8 mr-4"><i class="material-icons mr-3">favorite_border</i>Wishlist</span>
+                <ul class="list-bullet">
+                    <li class="list-item-bullet">@Model.Resume</li>
+                    
+                </ul>
+                <h5> <span class="prise-text-style ml-2">$@Model.Price</span></h5>
+                <a asp-action="Index" class="waves-effect waves-light btn gradient-45deg-deep-purple-blue d-none mt-2 mr-2">Back</a>
+                <a class="waves-effect waves-light btn gradient-45deg-purple-deep-orange mt-2">DEMAND IT</a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+

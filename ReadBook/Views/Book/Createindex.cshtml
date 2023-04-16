@@ -1,0 +1,136 @@
+﻿@model ReadBook.Models.Book
+@section Styling{
+    <link rel="stylesheet" type="text/css" href="~/css/pages/app-invoice.min.css">
+}
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Book</h4>
+<hr />
+<!--
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateCreation" class="control-label"></label>
+                <input asp-for="DateCreation" class="form-control" />
+                <span asp-validation-for="DateCreation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cover" class="control-label"></label>
+                <input asp-for="Cover" class="form-control" />
+                <span asp-validation-for="Cover" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Resume" class="control-label"></label>
+                <input asp-for="Resume" class="form-control" />
+                <span asp-validation-for="Resume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+-->
+<section class="invoice-edit-wrapper section">
+  <!-- invoice view page -->
+  <div class="col xl9 m8 s12">
+    <div class="card">
+      <div class="card-content px-36">
+        <!-- header section -->
+        <div class="row mb-3">
+          <div class="col xl6 m12 display-flex align-items-center">
+            <h6 class="invoice-number mr-4 mb-5">Book Name</h6>
+  
+          </div>
+          <div class="col xl6 m12">
+            <div class="invoice-date-picker display-flex align-items-center">
+              <div class="display-flex align-items-center">
+                <small>Date Issue: </small>
+                <div class="display-flex ml-4">
+                  <input asp-for="DateCreation" class="datepicker mr-2 mb-1" placeholder="Select Date" />
+                  <span asp-validation-for="DateCreation" class="text-danger"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- logo and title -->
+
+        <div class="row mb-3">
+          <div class="col m6 s12 invoice-logo display-flex pt-1 push-m6">
+            <img src="~/images/html.png" alt="logo" height="46" width="164">
+          </div>
+          <div class="col m6 s12 pull-m6">
+            <h4 class="indigo-text">Book</h4>
+            <input asp-for="Name" placeholder="Title of book" />
+              <span asp-validation-for="Name" class="text-danger"></span>
+          </div>
+        </div>
+  
+        <!-- invoice address and contact -->
+        <div class="row mb-3">
+
+          <div class="col l6 s12">
+          <form asp-action="create" asp-controller="Book" method="post">
+            <div class="input-field">
+              <input asp-for="DateCreation" class="datepicker mr-2 mb-1" placeholder="Select Date" />
+              <span asp-validation-for="DateCreation" class="text-danger"></span>
+            </div>
+            <div class="input-field">
+              <textarea class="materialize-textarea" asp-for="Resume" rows="4" placeholder="Description Or Resume"></textarea>
+            </div>
+            <div class="input-field">
+                <label for="file">Cover</label>
+              <input type="file" id="file" asp-for="Cover" class="form-control" placeholder="City">
+            </div>
+            <div class="input-field">
+              <input type="text" placeholder="Price" asp-for="Price">
+              <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="input-field">
+              <select asp-for="CategoryId" asp-items="Html.GetEnumSelectList<CategoriesBook>()" class="invoice-item-select browser-default">
+              </select>
+            </div>
+            <div class="input-field">
+              <button class="btn invoice-repeat-btn" data-repeater-create="" type="submit">
+              <i class="material-icons left">add</i>
+              <span>Add Item</span>
+              </button>
+            </div>
+          </form>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</section
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/scripts/app-invoice.min.js"></script>
+}

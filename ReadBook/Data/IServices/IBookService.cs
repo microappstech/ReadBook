@@ -6,8 +6,9 @@ namespace ReadBook.Data.IServices
     {
         Task<List<Book>> GetBooksAsync();
         Task<Book> GetBookAsync(int id);
-        Task AddBookAsync(Book book);
+        Task AddBookAsync(Book book,IFormFile formFile);
         Task DeleteBookAsync(int id);
         Task EditAsync(int id, Book book);
+        IEnumerable<Category> GetCategories();
     }
 }

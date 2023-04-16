@@ -2,20 +2,37 @@
 using Microsoft.EntityFrameworkCore;
 using ReadBook.Data.IServices;
 using ReadBook.Models;
+using System.Xml.Serialization;
 
 namespace ReadBook.Data.Services
 {
     public class BookService : IBookService
     {
         private readonly DBContext _context;
-        public BookService(DBContext dBContext)
+        readonly IUpload upload;
+        public BookService(DBContext dBContext, IUpload upload)
         {
             this._context = dBContext;
+            this.upload = upload;
         }
-        public async Task AddBookAsync(Book book)
+        public async Task AddBookAsync(Book book, IFormFile formFile)
         {
-            await _context.Books.AddAsync(book);
-            await _context.SaveChangesAsync();
+            Book bookT = new Book
+            {
+                Name = book.Name,
+                CategoryId = book.CategoryId,
+                DateCreation = book.DateCreation,
+                Resume = book.Resume,
+                Cover = formFile.FileName
+            };
+            await _context.Books.AddAsync(bookT);
+            var uploadedfile = await upload.UploadCover(formFile);
+            if (uploadedfile)
+            {
+                await _context.SaveChangesAsync();
+
+            } 
+            
         }
 
         public async Task DeleteBookAsync(int id)
@@ -47,6 +64,12 @@ namespace ReadBook.Data.Services
         {
            var books = await _context.Books.ToListAsync();
             return books;
+        }
+
+        public IEnumerable<Category> GetCategories()
+        {
+            var data = _context.Categories.ToList().OrderBy(c=>c.Name);
+            return data;
         }
     }
 }

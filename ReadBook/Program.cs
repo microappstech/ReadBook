@@ -12,6 +12,8 @@ builder.Services.AddDbContext<DBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
 });
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IWriterService, WriterService>();
+builder.Services.AddScoped<IUpload,UploadFile>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -25,7 +27,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(); 
 
 app.UseRouting();
 
