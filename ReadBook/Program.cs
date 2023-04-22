@@ -36,5 +36,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Book}/{action=Index}/{id?}");
-DbInitializer.Seed(app);
+// DbInitializer.Seed(app);
 app.Run();

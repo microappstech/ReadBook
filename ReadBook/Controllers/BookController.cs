@@ -58,18 +58,23 @@ namespace ReadBook.Controllers
         }
 
         // GET: BookController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var book = await bookService.GetBookAsync(id);
+            if(book==null) return RedirectToAction(nameof(Index));
+            return View(book);
         }
 
         // POST: BookController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, Book collection, IFormFile cover)
         {
             try
             {
+                var book = await bookService.GetBookAsync(id);
+                if (book == null) return RedirectToAction(nameof(Edit));
+                await bookService.EditAsync(id,collection,cover);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -79,18 +84,22 @@ namespace ReadBook.Controllers
         }
 
         // GET: BookController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            var book = await bookService.GetBookAsync(id);
+            return View(book);
         }
 
         // POST: BookController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {
+                var book = await bookService.GetBookAsync(id);
+                if (book == null) return View("NotFound");
+                bookService.DeleteBookAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
