@@ -4,6 +4,27 @@ namespace ReadBook.Data.Services
 {
     public class UploadFile : IUpload
     {
+        public async Task<bool> UploadPicture(IFormFile picture)
+        {
+            string path = "";
+
+            if (picture.Length>0)
+            {
+                string picturename = picture.FileName;
+                path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot\\images\\Users"));
+                if(!Directory.Exists(path)) 
+                {
+                    Directory.CreateDirectory(path);
+                }
+                using (var stream = new FileStream(Path.Combine(path, picturename), FileMode.Create))
+                {
+                    await picture.CopyToAsync(stream);
+                }
+                return true;
+
+            }
+            return false;
+        }
         public async Task<bool> UploadCover(IFormFile file)
         {
             string path = string.Empty;
