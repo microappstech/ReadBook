@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ReadBook.Data;
@@ -8,6 +9,7 @@ using ReadBook.Models;
 
 namespace ReadBook.Controllers
 {
+    [Authorize]
     public class BookController : Controller
     {
         private readonly IBookService bookService;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReadBook.Data;
 using ReadBook.Data.IServices;
@@ -6,6 +7,7 @@ using ReadBook.Models;
 
 namespace ReadBook.Controllers
 {
+    [Authorize]
     public class WriterController : Controller
     {
         private readonly IWriterService writerService;
@@ -17,6 +19,7 @@ namespace ReadBook.Controllers
             this.bookService = bookService;
             this.dBContext = dBContext;
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var data = await writerService.GetAllAsync();
@@ -28,7 +31,6 @@ namespace ReadBook.Controllers
             IEnumerable<BookWriter> bookwriter = writerService.Bookwriter(id).Result;
 
             var writer = await writerService.GetByIdAsync(id);
-            //var books = await bookService.GetBooksAsync();
             var BookOfWriter =  bookService.GetBooksAsync().Result.Where(b => b.BooksWiters!=null && b.BooksWiters.Any(w => w.WriterId == id)).ToList();
 
             ViewBag.BookOfWriter = BookOfWriter;

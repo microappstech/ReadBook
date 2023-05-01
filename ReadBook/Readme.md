@@ -1,10 +1,10 @@
-# ERORS
-The most erors i meet in this project
+# ERRORS
+The most errors i meet in this project
 ### ! Unable to create an object of type 'DBContext'. For the different patterns supported at design time, see https://go.microsoft.com/fwlink/?linkid=851728
 they was a problem in syntax of json Appsettings.json 
 
 ### The ConnectionString property has not been initialized.
-there is a eror in syntax of connection string ConnectionString=>ConnectionsStrings 
+there is a error in syntax of connection string ConnectionString=>ConnectionsStrings 
 
 ### A connection was successfully established with the server, but then an error occurred during the login process. (provider: SSL Provider, error: 0 - The certificate chain was issued by an authority that is not trusted.)
 We should add ` TrustServerCertificate = true ` the connections string for secure comminucations between server and App
@@ -101,4 +101,22 @@ public static void Seed(IApplicationBuilder applicationBuilder)
               }
            }
 ```
-## Relationship 
+## Identity 
+
+    1- Install "Microsoft.AspNetCore.Identity" 
+    2- Register Identity in your projects
+    ```
+        builder.Services.AddDbContext<AppliatioDbContext>(options =>
+        {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
+        }, ServiceLifetime.Transient);
+    -----------------------------------------------------------------------------------------------------------------------------
+        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddEntityFrameworkStores<ReadBookContext>();
+        <hr/>
+    -----------------------------------------------------------------------------------------------------------------------------
+        app.UseAuthentication();
+        app.UseAuthorization();
+    ```|
+
+    3- then add migration and update database
