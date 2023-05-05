@@ -22,6 +22,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ReadBookContext>();
+builder.Services.AddAuthorization(op => 
+    op.AddPolicy("AdminAccess", policy => 
+        policy.RequireClaim("Admin", "Admin")
+    )
+);
+
 
 
 builder.Services.AddScoped<IBookService, BookService>();
@@ -51,6 +57,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Writer}/{action=Index}/{id?}");
-// DbInitializer.Seed(app);
+DbInitializer.Seed(app);
 app.MapRazorPages();
 app.Run();

@@ -17,6 +17,7 @@ namespace ReadBook.Controllers
         {
             this.bookService = bookService;            
         }
+        
         // GET: BookController
         public async Task<IActionResult> Index()
         {
@@ -24,6 +25,7 @@ namespace ReadBook.Controllers
             return View(books);
         }
 
+        
         // GET: BookController/Details/5
         public async Task<IActionResult> Details(int id)
         {
@@ -36,13 +38,14 @@ namespace ReadBook.Controllers
         }
 
         // GET: BookController/Create
+
         public IActionResult Create()
         {
             var Categories = bookService.GetCategories();
             ViewBag.Categories = new SelectList(Categories, "Id", "Name");
             return View();
         }
-
+        [Authorize("AdminAccess")]
         // POST: BookController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -59,6 +62,7 @@ namespace ReadBook.Controllers
             }
         }
 
+        [Authorize("AdminAccess")]
         // GET: BookController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
@@ -67,6 +71,7 @@ namespace ReadBook.Controllers
             return View(book);
         }
 
+        [Authorize("AdminAccess")]
         // POST: BookController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -85,13 +90,15 @@ namespace ReadBook.Controllers
             }
         }
 
+        [Authorize("AdminAccess")]
         // GET: BookController/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var book = await bookService.GetBookAsync(id);
             return View(book);
         }
-
+        
+        [Authorize("AdminAccess")]
         // POST: BookController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -97,22 +97,22 @@ namespace ReadBook.Data.Seeder
                 {
                     new BookWriter()
                     {
-                        BookId = 1,
+                        BookId = 5,
                         WriterId = 2
                     },
                     new BookWriter()
                     {
-                        BookId = 2,
+                        BookId = 7,
                         WriterId = 1
                     },
                     new BookWriter()
                     {
-                        BookId = 2,
+                        BookId = 5,
                         WriterId = 3
                     },
                     new BookWriter()
                     {
-                        BookId = 1,
+                        BookId = 6,
                         WriterId = 3
                     }
                 });

@@ -120,3 +120,36 @@ public static void Seed(IApplicationBuilder applicationBuilder)
     ```|
 
     3- then add migration and update database
+
+## Authorization with claims 
+        ** Add required policy Claims ** 
+    ```
+        builder.services.AddAuthoritzation(opt=>opt.AddPolicy("AdminAccess",policy=>policy.RequireClaim("Admin","Admin"))
+    ```
+    -- Allow Access to users to accessing 
+    ```
+    ### in cs
+        [Authorize("AdminAccess")]
+        `before the action or controller
+    ### in html
+        @using Microsoft.AspNetCore.Authorization
+
+        @inject IAuthorizationService Athourize
+        @{
+            AuthorizationResult authorizationResult = await Athourize.AuthorizeAsync(User, "AdminAccess");
+        }
+
+        --------------
+        if (authorizationResult.Succeeded)
+        {
+            <li  class="bold" >
+                <a class="waves-effect waves-cyan " asp-controller="Writer" asp-action="Create"><i class="material-icons">group_add</i><span class="menu-title" data-i18n="Mail"></span><span class="badge new badge pill pink accent-2 float-right mr-2">5</span></a>
+            </li>                    
+        }
+    ```
+    -- Add specific claim for user 
+    if(user is admin)
+    ```
+        System.Security.Claims.Claim claimAdmin = new System.Security.Claims.Claim("AdminAccess", "AdminAccess");
+        await _userManager.AddClaimAsync(user,claimAdmin);
+    ```

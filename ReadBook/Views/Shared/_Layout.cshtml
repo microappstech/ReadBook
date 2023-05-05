@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject IAuthorizationService Athourize
+@{
+    AuthorizationResult authorizationResult = await Athourize.AuthorizeAsync(User, "AdminAccess");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="~/css/custom/custom.css">
 </head>
 <body >
-    <aside class="sidenav-main nav-collapsible sidenav-dark sidenav-active-rounded hidden">
+    <aside class="sidenav-main sidenav-dark sidenav-active-rounded hidden nav-collapsed" style="width:64px;">
           <div class="brand-sidebar">
             <h1 class="logo-wrapper">
                 <a class="brand-logo darken-1" href="/">
@@ -48,9 +57,27 @@
           <!---->
           <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
             <partial name="_LoginPartial" />
-            <li  class="bold display-none" >
-                <a class="waves-effect waves-cyan " asp-controller="Home" asp-action="Logout"><i class="material-icons">exit_to_app</i><span class="menu-title" data-i18n="Mail">Logout</span><span class="badge new badge pill pink accent-2 float-right mr-2">5</span></a>
-            </li>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li  class="bold" >
+                    <a class="waves-effect waves-cyan " asp-controller="Book" asp-action="Index"><i class="material-icons">library_books</i><span class="menu-title" data-i18n="Mail"></span><span class="badge new badge pill pink accent-2 float-right mr-2">5</span></a>
+                </li>
+                @if (authorizationResult.Succeeded)
+                {
+                    <li  class="bold" >
+                        <a class="waves-effect waves-cyan " asp-controller="Book" asp-action="Create"><i class="material-icons">bookmark_add</i><span class="menu-title" data-i18n="Mail"></span><span class="badge new badge pill pink accent-2 float-right mr-2">5</span></a>
+                    </li>                    
+                }
+                <li  class="bold" >
+                    <a class="waves-effect waves-cyan " asp-controller="Writer" asp-action="Index"><i class="material-icons">supervisor_account</i><span class="menu-title" data-i18n="Mail"></span><span class="badge new badge pill pink accent-2 float-right mr-2">5</span></a>
+                </li>
+                if (authorizationResult.Succeeded)
+                {
+                    <li  class="bold" >
+                        <a class="waves-effect waves-cyan " asp-controller="Writer" asp-action="Create"><i class="material-icons">group_add</i><span class="menu-title" data-i18n="Mail"></span><span class="badge new badge pill pink accent-2 float-right mr-2">5</span></a>
+                    </li>                    
+                }
+            }
 
             <li style="display:none;" class="bold">
                 <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">dvr</i><span class="menu-title" data-i18n="Templates">Templates</span></a>

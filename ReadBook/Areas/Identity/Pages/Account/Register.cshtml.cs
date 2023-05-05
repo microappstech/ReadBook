@@ -123,9 +123,13 @@ namespace ReadBook.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    
+                    //System.Security.Claims.Claim claim admin = new System.Security.Claims.Claim()
                     _logger.LogInformation("User created a new account with password.");
-
+                    if (user.Email.Contains("admain"))
+                    {
+                        System.Security.Claims.Claim claimAdmin = new System.Security.Claims.Claim("AdminAccess", "AdminAccess");
+                        await _userManager.AddClaimAsync(user,claimAdmin);
+                    }
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

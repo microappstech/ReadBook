@@ -28,6 +28,7 @@ namespace ReadBook.Data.Services
         public async Task AddAsync(Writer writer,IFormFile formFile)
         {
             var uploader = await upload.UploadPicture(formFile);
+            writer.Picture = formFile.FileName;
             if (uploader)
             {
                 await _dbcontext.Writers.AddAsync(writer);
@@ -48,15 +49,21 @@ namespace ReadBook.Data.Services
 
         public async Task EditAsync(int id, Writer writer, IFormFile formFile)
         {
-            //var EditedWriter = await _dbcontext.Writers.FindAsync(id);
-            //var uplodedPicture = await upload.UploadPicture(formFile);
-            //if (uplodedPicture)
-            //{
-            //    EditedWriter.Picture = formFile.FileName;
-            //    EditedWriter.Name = writer.Name;
-            //    EditedWriter.Nationality = writer.Nationality;
-            //}
-            await _dbcontext.SaveChangesAsync();
+            try
+            {
+                var EditedWriter = await _dbcontext.Writers.FindAsync(id);
+                var uplodedPicture = await upload.UploadPicture(formFile);
+                if (uplodedPicture)
+                {
+                    EditedWriter.Name = writer.Name;
+                    EditedWriter.Nationality = writer.Nationality;
+                    EditedWriter.Picture = formFile.FileName;
+                    await _dbcontext.SaveChangesAsync();
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception("");
+            }
 
         }
 

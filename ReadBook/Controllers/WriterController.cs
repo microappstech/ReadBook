@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.EntityFrameworkCore;
 using ReadBook.Data;
 using ReadBook.Data.IServices;
@@ -12,14 +13,12 @@ namespace ReadBook.Controllers
     {
         private readonly IWriterService writerService;
         private readonly IBookService bookService;
-        private readonly DBContext dBContext;
-        public WriterController(IWriterService service, IBookService bookService, DBContext dBContext)
+        public WriterController(IWriterService service, IBookService bookService)
         {
             this.writerService = service;
             this.bookService = bookService;
-            this.dBContext = dBContext;
         }
-        [Authorize]
+
         public async Task<IActionResult> Index()
         {
             var data = await writerService.GetAllAsync();
@@ -40,18 +39,18 @@ namespace ReadBook.Controllers
             }
             return View(writer);
         }
-
+        [Authorize("AdminAccess")]
         public async Task<IActionResult> Create()
         {
             return View();
         }
-
+        [Authorize("AdminAccess")]
         [HttpPost]
-        public async Task<IActionResult> Create(Writer writer, IFormFile picture)
+        public async Task<IActionResult> Create(Writer writer, IFormFile Picture)
         {
             try
             {
-                await writerService.AddAsync(writer, picture);
+                await writerService.AddAsync(writer, Picture);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -60,7 +59,31 @@ namespace ReadBook.Controllers
             }
             return RedirectToAction(nameof(Create));
         }
-
+        [Authorize("AdminAccess")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var writer = await writerService.GetByIdAsync(id);
+            if(writer == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(writer);
+        }
+        [Authorize("AdminAccess")]
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id,Writer writer, IFormFile Picture)
+        {
+            try
+            {
+                await writerService.EditAsync(id, writer, Picture);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                return View(ex);
+            }
+        }
+        [Authorize("AdminAccess")]
         public IActionResult Delete(int id)
         {
             return View();
