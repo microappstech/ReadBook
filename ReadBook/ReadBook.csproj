@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Identity\Data\Models\" />
     <Folder Include="Data\BaseData\" />
     <Folder Include="wwwroot\images\Book\" />
   </ItemGroup>

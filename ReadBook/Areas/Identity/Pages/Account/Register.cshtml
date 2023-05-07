@@ -10,12 +10,46 @@
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h4>Create a new account.</h4>
             <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="textred"></div>
             <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.UserName"></label>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
+            <div class="form-floating">
+                <input asp-for="Input.Email" class="form-control" autocomplete="on"  />
+                <label asp-for="Input.Email"></label>
+                <span asp-validation-for="Input.Email " class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Phone" class="form-control" autocomplete="on" />
+                <label asp-for="Input.Phone"></label>
+                <span asp-validation-for="Input.Phone" class="textred"></span>
+            </div>
+
+            <div class="form-floating">
+                <select asp-for="Input.Nationality" class="form-control" autocomplete="on" >
+                    <option value='Algeria'> Algeria</option>
+                    <option value='Bahrain'> Bahrain</option>
+                    <option value='Comoros'> Comoros</option>
+                    <option value='Djibouti'> Djibouti</option>
+                    <option value='Egypt'> Egypt</option>
+                    <option value='Iraq'> Iraq</option>
+                    <option value='Jordan'> Jordan</option>
+                    <option value='Kuwait'> Kuwait</option>
+                    <option value='Lebanon'> Lebanon</option>
+                    <option value='Libya'> Libya</option>
+                    <option value='Mauritania'> Mauritania</option>
+                    <option value='Morocco'> Morocco</option>
+                    <option value='Oman'> Oman</option>
+                    <option value='Palestine'> Palestine</option>
+                    <option value='Qatar'> Qatar</option>
+                    <option value='Saudi Arabia'> Saudi Arabia</option>
+                </select>
+                <label asp-for="Input.Nationality"></label>
+                <span asp-validation-for="Input.Nationality" class="textred"></span>
+            </div>
+
             <div class="form-floating">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
                 <label asp-for="Input.Password"></label>

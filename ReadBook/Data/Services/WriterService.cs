@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using ReadBook.Areas.Identity.Data;
 using ReadBook.Data.IServices;
 using ReadBook.Models;
 
@@ -13,6 +15,7 @@ namespace ReadBook.Data.Services
         {
             this._dbcontext = dBContext;
             this.upload = uploadFile;
+            //this._userManager = userManager;
         }
 
         public async Task<IEnumerable<Writer>> GetAllAsync()
@@ -27,14 +30,21 @@ namespace ReadBook.Data.Services
         }
         public async Task AddAsync(Writer writer,IFormFile formFile)
         {
-            var uploader = await upload.UploadPicture(formFile);
-            writer.Picture = formFile.FileName;
-            if (uploader)
-            {
-                await _dbcontext.Writers.AddAsync(writer);
-
-            }
-            await _dbcontext.SaveChangesAsync();
+            var user = Activator.CreateInstance<AppUser>();
+            user.Email = (writer.Name + "@gmal.com").Replace(" ", "");
+            user.UserName = writer.Name.Replace(" ","");
+            writer.userid = user.Id;
+            //var resultCreated = await _userManager.CreateAsync(user, writer.Name.Replace(" ","") + '!');
+            writer.Picture = formFile!=null ? formFile.FileName : writer.Picture;
+            
+            if (formFile != null)
+                writer.Picture = formFile.FileName;
+                await upload.UploadPicture(formFile);
+            //if (resultCreated.Succeeded)
+            //{
+            //    await _dbcontext.Writers.AddAsync(writer);
+            //    await _dbcontext.SaveChangesAsync();
+            //}
         }
 
         public async Task<IEnumerable<BookWriter>> Bookwriter(int? idwriter, int? idbook)
@@ -51,16 +61,16 @@ namespace ReadBook.Data.Services
         {
             try
             {
+
                 var EditedWriter = await _dbcontext.Writers.FindAsync(id);
-                var uplodedPicture = await upload.UploadPicture(formFile);
-                if (uplodedPicture)
-                {
-                    EditedWriter.Name = writer.Name;
-                    EditedWriter.Nationality = writer.Nationality;
-                    EditedWriter.Picture = formFile.FileName;
-                    await _dbcontext.SaveChangesAsync();
-                }
-            }catch(Exception ex)
+                await upload.UploadPicture(formFile);
+                EditedWriter.Name = writer.Name;
+                EditedWriter.Nationality = writer.Nationality;
+                EditedWriter.Picture = formFile.FileName;
+                await _dbcontext.SaveChangesAsync();
+
+            }
+            catch(Exception ex)
             {
                 throw new Exception("");
             }

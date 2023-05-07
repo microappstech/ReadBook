@@ -4,11 +4,11 @@ namespace ReadBook.Data.Services
 {
     public class UploadFile : IUpload
     {
-        public async Task<bool> UploadPicture(IFormFile picture)
+        public async Task UploadPicture(IFormFile picture)
         {
             string path = "";
 
-            if (picture.Length>0)
+            if (picture !=null && picture.Length>0)
             {
                 string picturename = picture.FileName;
                 path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot\\images\\Users"));
@@ -20,10 +20,7 @@ namespace ReadBook.Data.Services
                 {
                     await picture.CopyToAsync(stream);
                 }
-                return true;
-
             }
-            return false;
         }
         public async Task<bool> UploadCover(IFormFile file)
         {

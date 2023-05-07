@@ -8,9 +8,9 @@ namespace ReadBook.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public HomeController(SignInManager<IdentityUser> signInManager, ILogger<HomeController> logger)
+        public HomeController(SignInManager<AppUser> signInManager, ILogger<HomeController> logger)
         {
             _signInManager = signInManager;
             _logger = logger;

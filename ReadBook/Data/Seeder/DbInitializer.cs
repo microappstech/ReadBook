@@ -1,9 +1,54 @@
-﻿using ReadBook.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using ReadBook.Enums;
+using ReadBook.Models;
 
 namespace ReadBook.Data.Seeder
 {
-    public class DbInitializer
+    public static class DbInitializer
     {
+        public static async Task SeedAsyncRoles(RoleManager<IdentityRole> roleManager) 
+        {
+            await roleManager.CreateAsync(new IdentityRole(Roles.AccessAdmin.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Manager.ToString()));
+        }
+        public static async Task SeedAsyncUsers(UserManager<AppUser> userManager)
+        {
+            var UserOne = new AppUser { UserName = "UserOne", Email = "UserOne@gmail.com", EmailConfirmed = true };
+            if (userManager.FindByEmailAsync(UserOne.Email) == null)
+            {
+                await userManager.CreateAsync(UserOne, UserOne.UserName + "!");
+                await userManager.AddToRoleAsync(UserOne, Roles.Manager.ToString());
+            }
+
+            var UserTwo = new AppUser { UserName = "UserTwo", Email = "UserTwo@gmail.com", EmailConfirmed = true };
+            if (userManager.FindByEmailAsync(UserTwo.Email) == null)
+            {
+                await userManager.CreateAsync(UserTwo, UserTwo.UserName + "!");
+            }
+            
+            var UserThree = new AppUser { UserName = "UserTwo", Email = "UserTwo@gmail.com", EmailConfirmed = true };
+            if (userManager.FindByEmailAsync(UserThree.Email) == null)
+            {
+                await userManager.CreateAsync(UserThree, UserThree.UserName + "!");
+            }
+            
+            var UserFour = new AppUser { UserName = "UserTwo", Email = "UserTwo@gmail.com", EmailConfirmed = true };
+            if (userManager.FindByEmailAsync(UserFour.Email) == null)
+            {
+                await userManager.CreateAsync(UserFour, UserFour.UserName + "!");
+            }
+        
+        }
+        
+        public static async Task SeedClaimsForAdmin(RoleManager<IdentityRole> roleManager)
+        {
+            var adminRole = await roleManager.FindByNameAsync(Roles.AccessAdmin.ToString());
+        }
+        public static async Task SeedClaims(this RoleManager<IdentityRole> roleManager, IdentityRole role, string module)
+        {
+            
+        }
         public static void Seed(IApplicationBuilder applicationBuilder)
         {
             using (var scop = applicationBuilder.ApplicationServices.CreateScope())
@@ -97,22 +142,22 @@ namespace ReadBook.Data.Seeder
                 {
                     new BookWriter()
                     {
-                        BookId = 5,
+                        BookId = _dbContext.Books.FirstOrDefault().Id,
                         WriterId = 2
                     },
                     new BookWriter()
                     {
-                        BookId = 7,
+                        BookId = _dbContext.Books.ToList()[0].Id,
                         WriterId = 1
                     },
                     new BookWriter()
                     {
-                        BookId = 5,
+                        BookId =  _dbContext.Books.ToList()[1].Id,
                         WriterId = 3
                     },
                     new BookWriter()
                     {
-                        BookId = 6,
+                        BookId = _dbContext.Books.ToList()[2].Id,
                         WriterId = 3
                     }
                 });

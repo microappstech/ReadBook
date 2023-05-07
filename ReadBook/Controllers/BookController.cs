@@ -17,16 +17,16 @@ namespace ReadBook.Controllers
         {
             this.bookService = bookService;            
         }
-        
-        // GET: BookController
+
+
         public async Task<IActionResult> Index()
         {
             var books = await bookService.GetBooksAsync();
             return View(books);
         }
 
-        
-        // GET: BookController/Details/5
+
+
         public async Task<IActionResult> Details(int id)
         {
             var book = await bookService.GetBookAsync(id);
@@ -36,19 +36,18 @@ namespace ReadBook.Controllers
             }
             return View(book);
         }
-
-        // GET: BookController/Create
-
+        
+        [Authorize("AdminAccess")]
         public IActionResult Create()
         {
             var Categories = bookService.GetCategories();
             ViewBag.Categories = new SelectList(Categories, "Id", "Name");
             return View();
         }
-        [Authorize("AdminAccess")]
-        // POST: BookController/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("AdminAccess")]
         public async Task<IActionResult> Create(Book book, IFormFile cover)
         {
             try
@@ -62,8 +61,8 @@ namespace ReadBook.Controllers
             }
         }
 
+
         [Authorize("AdminAccess")]
-        // GET: BookController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var book = await bookService.GetBookAsync(id);
@@ -71,10 +70,9 @@ namespace ReadBook.Controllers
             return View(book);
         }
 
-        [Authorize("AdminAccess")]
-        // POST: BookController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("AdminAccess")]
         public async Task<IActionResult> Edit(int id, Book collection, IFormFile cover)
         {
             try
@@ -90,18 +88,19 @@ namespace ReadBook.Controllers
             }
         }
 
+
         [Authorize("AdminAccess")]
-        // GET: BookController/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var book = await bookService.GetBookAsync(id);
             return View(book);
         }
         
-        [Authorize("AdminAccess")]
-        // POST: BookController/Delete/5
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("AdminAccess")]
         public async Task<IActionResult> Delete(int id, IFormCollection collection)
         {
             try
