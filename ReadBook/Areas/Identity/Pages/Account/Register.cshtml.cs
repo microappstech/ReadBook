@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ReadBook.Data.IServices;
 
 namespace ReadBook.Areas.Identity.Pages.Account
 {
@@ -31,6 +32,7 @@ namespace ReadBook.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<AppUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IWriterService _writerService;
 
         public RegisterModel(
             RoleManager<IdentityRole> roleManager,
@@ -38,6 +40,7 @@ namespace ReadBook.Areas.Identity.Pages.Account
             IUserStore<AppUser> userStore,
             SignInManager<AppUser> signInManager,
             ILogger<RegisterModel> logger,
+            IWriterService writerService,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -47,6 +50,7 @@ namespace ReadBook.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _writerService = writerService;
         }
 
         /// <summary>
@@ -111,6 +115,7 @@ namespace ReadBook.Areas.Identity.Pages.Account
 
             [Display(Name ="Nationality")]
             public string Nationality { get; set; }
+            public bool isWriter { get; set; }
         }
 
 
@@ -139,7 +144,19 @@ namespace ReadBook.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    if (user.Email.Contains("admin"))
+                    if (Input.isWriter)
+                    {
+                        Writer writer = new Writer()
+                        {
+                            Name = Input.UserName,
+                            Nationality = Input.Nationality,
+                            Email = Input.Email
+                        };
+                        await _writerService.AddAsync(writer, null);
+                        System.Security.Claims.Claim writerclaim = new System.Security.Claims.Claim("WriterAccess", "WriterAccess");
+                        await _userManager.AddClaimAsync(user, writerclaim);
+                    }
+                    if (user.Email.Contains("admin") || user.Email.Contains("Admin") || user.Email.Contains("ADMIN"))   
                     {
                         System.Security.Claims.Claim claimAdmin = new System.Security.Claims.Claim("AdminAccess", "AdminAccess");
                         await _userManager.AddClaimAsync(user,claimAdmin);

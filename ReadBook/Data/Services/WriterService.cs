@@ -31,19 +31,21 @@ namespace ReadBook.Data.Services
         public async Task AddAsync(Writer writer,IFormFile formFile)
         {
             var user = Activator.CreateInstance<AppUser>();
-            user.Email = (writer.Name + "@gmal.com").Replace(" ", "");
+            user.Email = (writer.Name + "@gmail.com").Replace(" ", "");
             user.UserName = writer.Name.Replace(" ","");
             writer.userid = user.Id;
             //var resultCreated = await _userManager.CreateAsync(user, writer.Name.Replace(" ","") + '!');
             writer.Picture = formFile!=null ? formFile.FileName : writer.Picture;
             
             if (formFile != null)
+            {
                 writer.Picture = formFile.FileName;
                 await upload.UploadPicture(formFile);
+            }
             //if (resultCreated.Succeeded)
             //{
-            //    await _dbcontext.Writers.AddAsync(writer);
-            //    await _dbcontext.SaveChangesAsync();
+            await _dbcontext.Writers.AddAsync(writer);
+            await _dbcontext.SaveChangesAsync();
             //}
         }
 

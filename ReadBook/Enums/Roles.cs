@@ -4,6 +4,7 @@
     {
         AccessAdmin ,
         Manager ,
+        Writer
 
 
     }

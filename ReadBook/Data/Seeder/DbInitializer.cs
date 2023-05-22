@@ -11,6 +11,7 @@ namespace ReadBook.Data.Seeder
         {
             await roleManager.CreateAsync(new IdentityRole(Roles.AccessAdmin.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.Manager.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Writer.ToString()));
         }
         public static async Task SeedAsyncUsers(UserManager<AppUser> userManager)
         {

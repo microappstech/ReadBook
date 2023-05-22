@@ -33,11 +33,10 @@ builder.Services.AddDbContext<DBContext>(options =>
 });
 
 
-builder.Services.AddAuthorization(op => 
-    op.AddPolicy("AdminAccess", policy => 
-        policy.RequireClaim("Admin", "Admin")
-    )
-);
+builder.Services.AddAuthorization(op => {
+    op.AddPolicy("AdminAccess", policy => policy.RequireClaim("AdminAccess", "AdminAccess") );
+    op.AddPolicy("WriterAccess", policy => policy.RequireClaim("WriterAccess", "WriterAccess"));
+}) ;
 
 
 

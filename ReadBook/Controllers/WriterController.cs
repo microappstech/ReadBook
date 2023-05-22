@@ -18,7 +18,7 @@ namespace ReadBook.Controllers
             this.writerService = service;
             this.bookService = bookService;
         }
-
+        [Authorize("WriterAccess")]
         public async Task<IActionResult> Index()
         {
             var data = await writerService.GetAllAsync();
