@@ -1,0 +1,41 @@
+﻿@page "/editcategory/{id:int}"
+@inject NavigationManager NavigationManager
+@inject Service ServiceCategory
+
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="formCate" @bind-IsValid="success" @bind-Errors="errors" OnValidSubmit="Save">
+                <MudTextField T="string" Label="Description" Required="true" @bind-Value="@Category.Name" RequiredError="Description is Required"></MudTextField>
+
+                <div class="d-flex align-center justify-space-between">
+                    <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" OnClick="Save" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Save" Disabled="@(!success)" Class="ml-auto">Save</MudButton>
+                </div>
+            </MudForm>
+        </MudPaper>
+        <MudPaper Class="pa-4 mt-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(()=>formCate.ResetAsync())" Class="mx-2">Reset</MudButton>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    MudForm formCate;
+    public Category Category = new Category();
+    protected override async Task OnInitializedAsync()
+    {
+        Category = await ServiceCategory.GetSingleCategory(id);
+    }
+    public async Task Save()
+    {
+        var resultSave = await ServiceCategory.EditCategory(Category);
+        NavigationManager.NavigateTo("/categories");
+    }
+
+    bool success;
+    string[] errors = { };
+}

@@ -1,0 +1,119 @@
+﻿@page "/createbook"
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@inject Service ServiceBook
+
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors" OnValidSubmit="@Save">
+                <MudTextField T="string" Label="Title" Required="true" @bind-Value="@book.Title" RequiredError="Title is Required"></MudTextField>
+                <MudTextField T="string" Label="Description" Required="true" @bind-Value="@book.Description" RequiredError="Description is Required"></MudTextField>
+                <MudNumericField T="Decimal" Label="Price" Required="true" @bind-Value="@book.Price" RequiredError="Price is Required"></MudNumericField>
+                <MudDatePicker T="DateTime" Label="Date Publication" Required="true" @bind-Value="@book.Datepublication" RequiredError="Date is Required"></MudDatePicker>
+                <MudSelect Dense="true" T="int" @bind-Value="@book.CategoryId" Label="Category" Variant="Variant.Filled">
+                    @foreach(var cate in Categories)
+                    {
+                        <MudSelectItem Value="@cate.Id" >@cate.Name</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudTextField T="string" Label="Athour" Required="false" @bind-Value="@book.Author" ></MudTextField>
+                <div class="row">
+                    <div class="col-md-6 d-flex">
+                        <MudImage Style="height:60px;width:60px; margin:10px;" Alt="@book.Title" Src="@book.Icon"></MudImage>
+                        <MudFileUpload T="IBrowserFile" FilesChanged="UploadIcon">
+                            <ButtonTemplate>
+                                <MudIconButton HtmlTag="label"
+                                               Color="Color.Info"
+                                               Icon="@Icons.Material.Filled.PhotoCamera"
+                                               for="@context">
+                                </MudIconButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </div>
+                </div>
+                <div class="d-flex align-center justify-space-between">
+                    <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" OnClick="Save" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Save" Disabled="@(!success)" Class="ml-auto">Save</MudButton>
+                </div>
+            </MudForm>
+        </MudPaper>
+        <MudPaper Class="pa-4 mt-4">
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true" OnClick="@(()=>form.ResetAsync())" Class="mx-2">Reset</MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Class="pa-4 mud-height-full text-center">
+            <MudImage Style="height:60px;width:60px; margin:10px;" Alt="@book.Title" Src="@book.Icon"></MudImage><br />
+            <em><strong>@book.Title</strong></em>
+            <div>
+                <small>Description :</small>
+                <small>
+                    <p>@book.Description</p>
+                </small>
+            </div>
+            <div class="text-start">
+                <div>
+                    <small>Date Publcation : </small> 
+                    <span>@book.Datepublication</span>
+                </div><br/>
+                <div>
+                    <small>Price : </small>
+                    <span>@book.Price</span>
+                </div><br/>
+                <div>
+                    <small>Author : </small>
+                    <span>@book.Author</span>
+                </div><br/>
+                <div>
+                    <small>Category : </small>
+                    <span>@book.Category?.Name</span>
+                </div><br/>
+                <div>
+                    <small>Stars : </small>
+                    <span class="text-success">@book.Stars</span>
+                </div><br/>
+                <div>
+                    <small>Date Add : </small>
+                    <span>@book.DateAdd</span>
+                </div>
+            </div>
+
+
+
+
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    public Book book { get; set; }
+    List<Category> Categories = new List<Category>();
+    protected override async Task OnInitializedAsync()
+    {
+        book = new Book { };
+        Categories = await ServiceBook.GetCategories();
+
+    }
+
+    public async void UploadIcon(IBrowserFile icon)
+    {
+        MemoryStream ms = new MemoryStream();
+        await icon.OpenReadStream(maxAllowedSize:10*1024*1024).CopyToAsync(ms);
+        var bytes = ms.ToArray();
+        string base64ImageRepresentation = Convert.ToBase64String(bytes);
+        book.Icon = "data:image/png;base64," + base64ImageRepresentation;
+
+    }
+    bool success;
+    string[] errors = { };
+    MudTextField<string> pwField1;
+    MudForm form;
+    public async Task Save()
+    {
+        var resultSave = await ServiceBook.CreateBook(book);
+    }
+
+}

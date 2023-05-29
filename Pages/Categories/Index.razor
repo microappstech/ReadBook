@@ -1,0 +1,42 @@
+﻿@page "/categories"
+@using ReadBookMuds.Services
+@using ReadBookMuds.Models
+
+@inject Service ServiceCategy
+
+<PageTitle>Categories</PageTitle>
+
+<div class="row d-flex mb-3">
+    <div class="col-md-4 d-flex justify-content-between">
+        <MudButton Variant="Variant.Filled" Size="@Size.Medium" StartIcon="@Icons.Material.Filled.Add" Link="/createcategory" Color="Color.Primary">Add</MudButton>
+        <MudButton Variant="Variant.Filled" Size="@Size.Medium" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error">Delete Selected</MudButton>
+    </div>
+</div>
+<MudDataGrid Items="@Categories" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <Columns>
+        <SelectColumn T="Category"/>
+        <PropertyColumn Property="x => x.Id" />
+        <PropertyColumn Property="x => x.Name" Title="Name" />
+        <TemplateColumn CellClass="p-0 m-0">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Delete"></MudIconButton>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Edit" Link="@string.Concat("/editcategory/", context.Item.Id)"></MudIconButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
+
+@code {
+    public List<Category> Categories;
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await ServiceCategy.GetCategories();
+    }
+
+
+
+
+
+}
