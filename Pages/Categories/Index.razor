@@ -8,7 +8,7 @@
 
 <div class="row d-flex mb-3">
     <div class="col-md-4 d-flex justify-content-between">
-        <MudButton Variant="Variant.Filled" Size="@Size.Medium" StartIcon="@Icons.Material.Filled.Add" Link="/createcategory" Color="Color.Primary">Add</MudButton>
+        <MudButton Variant="Variant.Filled" Size="@Size.Medium" StartIcon="@Icons.Material.Filled.Add" Href="/createcategory" Color="Color.Primary">Add</MudButton>
         <MudButton Variant="Variant.Filled" Size="@Size.Medium" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error">Delete Selected</MudButton>
     </div>
 </div>
@@ -21,7 +21,7 @@
             <CellTemplate>
                 <MudStack Row>
                     <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Delete"></MudIconButton>
-                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Edit" Link="@string.Concat("/editcategory/", context.Item.Id)"></MudIconButton>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Edit" Href="@string.Concat("/editcategory/", context.Item.Id)"></MudIconButton>
                 </MudStack>
             </CellTemplate>
         </TemplateColumn>
@@ -29,7 +29,7 @@
 </MudDataGrid>
 
 @code {
-    public List<Category> Categories;
+    public List<Category>? Categories { get; set; }
     protected override async Task OnInitializedAsync()
     {
         Categories = await ServiceCategy.GetCategories();
